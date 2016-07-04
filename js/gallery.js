@@ -47,8 +47,24 @@
 			setTimeout(function()
 			{
 				qqw_instance.goToIndex($(clicked_element).index());
+
+				$('.qqw__wrap .qqw__next').click(function(){
+					qqw_instance.goToIndex(qqw_instance.activeIndex + 1);
+				});
+
+				$('.qqw__wrap .qqw__previous').click(function(){
+					qqw_instance.goToIndex(qqw_instance.activeIndex - 1);
+				});
+
+				$('.qqw__wrap .qqw__close').click(function(){
+					$('.qqw__wrap').remove();
+
+					$('body').removeAttr('style');
+				});
+
 			}, 100);
 		});
+
 	}
 
 	qqw.prototype.bootstrap = function()
@@ -56,17 +72,24 @@
 		var html = 	'<div class="qqw__wrap">';
 		html +=			'<span class="qqw__next"></span>';
 		html +=			'<span class="qqw__previous"></span>';
+		html +=			'<span class="qqw__close">&times;</span>';
 		html +=			'</div>';
 
-		$(html).appendTo('body');
+		$('body').css('overflow', 'hidden').append(html);
 	}
 
 	qqw.prototype.goToIndex = function(index)
 	{
-		if(index < 0 || index >= this.imageList.length)
+		if(index < 0)
+		{
+			index = this.imageList.length - 1;
+		}
+		else if(index >= this.imageList.length)
 		{
 			index = 0;
 		}
+
+		this.activeIndex = index;
 
 		$('.qqw__wrap').css('background-image', 'url(' + this.imageList[index] + ')');
 	}
